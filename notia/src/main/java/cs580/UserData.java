@@ -7,10 +7,6 @@ public class UserData {
     private String password;
     private String email;
 
-
-
-
-
     public UserData(String firstName, String lastName, String username,
                                         String password, String email) {
         this.firstName = firstName;
@@ -20,25 +16,13 @@ public class UserData {
         this.email = email;
     }
 
-
-
     public void updateUserName() {}
 
     public void updatePassword() {}
 
     public void updateEmail() {}
 
+    public String getUserDataSummary() { return "";}
 
-
-    public String getUserDataSummary() { return;}
-
-
-
-
-
-
-
-
-
-
+        
 }
