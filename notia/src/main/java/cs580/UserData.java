@@ -6,7 +6,7 @@ public class UserData {
     private String username;
     private String password;
     private String email;
-
+    
     public UserData(String firstName, String lastName, String username,
                                         String password, String email) {
         this.firstName = firstName;
@@ -16,13 +16,24 @@ public class UserData {
         this.email = email;
     }
 
-    public void updateUserName() {}
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public String getEmail() { return email; }
 
-    public void updatePassword() {}
+    public void updateUserName(String username) { this.username = username; }
+    public void updatePassword(String password) { this.password = password; }
+    public void updateEmail(String email) { this.email = email; }
 
-    public void updateEmail() {}
+    public String getUserDataSummary() { 
+        return "";
+    }
 
-    public String getUserDataSummary() { return "";}
-
-        
+    public boolean validateUserLogin(String username, String password) {
+        if (this.username.equals(username) && this.password.equals(password)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
