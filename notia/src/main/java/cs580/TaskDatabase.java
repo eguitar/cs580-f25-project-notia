@@ -10,8 +10,8 @@ public class TaskDatabase {
 
     public ArrayList<Task> getTaskList() {}
 
-    public Task getTaskByID() {}
-    public Task getTaskByName() {}
+    public Task getTaskByID() {} // return null if can't find
+    public Task getTaskByName() {} // return null if can't find
 
     public void updateTask() {}
 
