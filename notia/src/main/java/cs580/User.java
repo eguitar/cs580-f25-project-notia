@@ -17,8 +17,8 @@ public class User {
     public void addEvent() {}
     public void removeEvent() {}
 
-    public String getTaskDatabaseSummary() {}
-    public String getEventDatabaseSummary() {}
+    // public String getTaskDatabaseSummary() {}
+    // public String getEventDatabaseSummary() {}
 
     public boolean loginUser(String username, String password) {
         if (userInfo.validateUserLogin(username, password)) {
@@ -28,7 +28,4 @@ public class User {
             return false;
         }
     }
-
-
-    
 }

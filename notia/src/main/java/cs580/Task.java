@@ -11,27 +11,40 @@ public class Task {
     private ArrayList<String> tags;
     private String notes;
 
-    public Task() {
-
+    public Task(int taskID, String name, String description, 
+                Date date, ArrayList<String> tags, String notes) {
+        this.taskID = taskID;
+        this.name = name;
+        this.description = description;
+        this.date = date;
+        this.tags = tags;
+        this.notes = notes;
     }
 
-    public int getTaskID() {}
-    public void setTaskID(int taskID) {}
+    public int getTaskID() { return taskID; }
+    public void setTaskID(int taskID) { this.taskID = taskID; }
 
-    public String getTaskName() {}
-    public void setTaskName(String name) {}
+    public String getTaskName() { return name; }
+    public void setTaskName(String name) { this.name = name; }
 
-    public String getTaskDescription() {}
-    public void setTaskDescription(String description) {}
+    public String getTaskDescription() { return description; }
+    public void setTaskDescription(String description) { this.description = description; }
 
-    public Date getTaskDate() {}
-    public void setTaskDate(Date date) {}
+    public Date getTaskDate() { return date; }
+    public void setTaskDate(Date date) { this.date = date; }
 
-    public ArrayList<String> getTaskTags() {}
-    public void setTaskTags(ArrayList<String> tags) {}
+    public ArrayList<String> getTaskTags() { return tags; }
+    public void setTaskTags(ArrayList<String> tags) { this.tags = tags; }
 
-    public String getTaskNotes() {}
-    public void setTaskNotes(String notes) {}
+    public String getTaskNotes() { return notes; }
+    public void setTaskNotes(String notes) { this.notes = notes; }
 
-    public String getTaskSummary() {}
+    public String getTaskSummary() {
+        return "Task ID: " + taskID +
+               "\nName: " + name +
+               "\nDescription: " + description +
+               "\nDate: " + date +
+               "\nTags: " + tags +
+               "\nNotes: " + notes;
+    }
 }

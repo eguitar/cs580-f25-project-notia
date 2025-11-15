@@ -1,19 +1,35 @@
 package cs580;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public class TaskDatabase {
+public class TaskDatabase implements Iterable<Task> {
     private ArrayList<Task> taskList = new ArrayList<>();
 
-    public void addTask() {}
-    public void removeTask() {}
+    public void addTask(Task task) { taskList.add(task); }
+    public void removeTask(Task task) { taskList.remove(task); }
+    public ArrayList<Task> getTaskList() { return taskList; }
 
-    public ArrayList<Task> getTaskList() {}
+    public Task getTaskByID(int taskID) {
+        for (Task task : taskList) {
+            if (task.getTaskID() == taskID) {
+                return task;
+            }
+        }
+        return null;
+    }
 
-    public Task getTaskByID() {} // return null if can't find
-    public Task getTaskByName() {} // return null if can't find
+    public Task getTaskByName(String name) {
+        for (Task task : taskList) {
+            if (task.getTaskName().equals(name)) {
+                return task;
+            }
+        }
+        return null;
+    }
 
-    public void updateTask() {}
-
-    public String getTaskDatabaseSummary() {}
+    @Override
+    public Iterator<Task> iterator() {
+        return taskList.iterator();
+    }
 }

@@ -11,28 +11,45 @@ public class Event {
     private Date endDate;
     private String notes;
 
-    public Event() {}
+    public Event(int eventID, String name, String description,
+                 String location, Date startDate, Date endDate, String notes) {
+        this.eventID = eventID;
+        this.name = name;
+        this.description = description;
+        this.location = location;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.notes = notes;
+    }
 
-    public int getEventID() {}
-    public void setEventID(int eventID) {}
+    public int getEventID() { return eventID; }
+    public void setEventID(int eventID) { this.eventID = eventID; }
 
-    public String getEventName() {}
-    public void setEventName(String name) {}
+    public String getEventName() { return name; }
+    public void setEventName(String name) { this.name = name; }
 
-    public String getEventDescription() {}
-    public void setEventDescription(String description) {}
+    public String getEventDescription() { return description; }
+    public void setEventDescription(String description) { this.description = description; }
 
-    public String getEventLocation() {}
-    public void setEventLocation(String location) {}
+    public String getEventLocation() { return location; }
+    public void setEventLocation(String location) { this.location = location; }
 
-    public Date getEventStartDate() {}
-    public void setEventStartDate(Date startDate) {}
+    public Date getEventStartDate() { return startDate; }
+    public void setEventStartDate(Date startDate) { this.startDate = startDate; }
 
-    public Date getEventEndDate() {}
-    public void setEventEndDate(Date endDate) {}
+    public Date getEventEndDate() { return endDate; }
+    public void setEventEndDate(Date endDate) { this.endDate = endDate; }
 
-    public String getEventNotes() {}
-    public void setEventNotes(String notes) {}
+    public String getEventNotes() { return notes; }
+    public void setEventNotes(String notes) { this.notes = notes; }
 
-    public String getEventInfo() {}
+    public String getEventInfo() {
+        return "Event ID: " + eventID +
+               "\nName: " + name +
+               "\nDescription: " + description +
+               "\nLocation: " + location +
+               "\nStart Date: " + startDate +
+               "\nEnd Date: " + endDate +
+               "\nNotes: " + notes;
+    }
 }
