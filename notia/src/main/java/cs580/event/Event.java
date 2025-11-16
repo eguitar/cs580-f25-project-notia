@@ -161,7 +161,7 @@ public class Event {
     }
 
     // Private EventBuilder class - only accessible within Event
-    private static class EventBuilder {
+    public static class EventBuilder {
         private final int eventID;
         private final String name;
         private String description;
