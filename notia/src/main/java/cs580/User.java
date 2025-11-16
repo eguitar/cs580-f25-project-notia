@@ -1,5 +1,8 @@
 package cs580;
 
+import cs580.Event_EventDatabase.Event;
+import cs580.Event_EventDatabase.EventDatabase;
+
 public class User {
     private UserData userInfo;
     private TaskDatabase taskDatabase;
@@ -11,11 +14,17 @@ public class User {
         this.eventDatabase = eventDatabase;
     }
 
-    public void addTask() {}
-    public void removeTask() {}
+    public void addTask() {
+    }
 
-    public void addEvent() {}
-    public void removeEvent() {}
+    public void removeTask() {
+    }
+
+    public void addEvent() {
+    }
+
+    public void removeEvent() {
+    }
 
     public void displayTaskDatabaseSummary() {
         System.out.println();
@@ -28,7 +37,7 @@ public class User {
     public void displayEventDatabaseSummary() {
         System.out.println();
         for (Event event : eventDatabase) {
-            System.out.println(event.getEventSummary());
+            System.out.println(event.getEventInfo());
         }
         System.out.println();
     }
@@ -36,8 +45,7 @@ public class User {
     public boolean loginUser(String username, String password) {
         if (userInfo.validateUserLogin(username, password)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }

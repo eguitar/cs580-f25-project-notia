@@ -1,4 +1,4 @@
-package cs580;
+package cs580.Event_EventDatabase;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,7 +7,8 @@ public class EventDatabase implements Iterable<Event> {
     private static EventDatabase instance = null;
     private ArrayList<Event> eventList = new ArrayList<>();
 
-    private EventDatabase() {}
+    private EventDatabase() {
+    }
 
     public static EventDatabase getInstance() {
         if (instance == null) {
@@ -16,9 +17,17 @@ public class EventDatabase implements Iterable<Event> {
         return instance;
     }
 
-    public void addEvent(Event event) { eventList.add(event); }
-    public void removeEvent(Event event) { eventList.remove(event); }
-    public ArrayList<Event> getEventList() { return eventList; }
+    public void addEvent(Event event) {
+        eventList.add(event);
+    }
+
+    public void removeEvent(Event event) {
+        eventList.remove(event);
+    }
+
+    public ArrayList<Event> getEventList() {
+        return eventList;
+    }
 
     public Event getEventByID(int eventID) {
         for (Event event : eventList) {
