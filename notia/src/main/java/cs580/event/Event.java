@@ -1,4 +1,4 @@
-package cs580.Event_EventDatabase;
+package cs580.event;
 
 import cs580.exception_handling.DateValidator;
 import cs580.exception_handling.Validator;

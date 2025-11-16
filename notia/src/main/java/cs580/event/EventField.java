@@ -1,4 +1,4 @@
-package cs580.Event_EventDatabase;
+package cs580.event;
 
 import java.util.Date;
 
