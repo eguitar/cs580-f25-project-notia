@@ -25,7 +25,10 @@ public class UserData {
     public void updateEmail(String email) { this.email = email; }
 
     public String getUserDataSummary() { 
-        return "";
+        return "Name: " + firstName + " " + lastName +
+               "\nEmail: " + email +
+               "\nUsername: " + username +
+               "\nPassword: " + password;
     }
 
     public boolean validateUserLogin(String username, String password) {

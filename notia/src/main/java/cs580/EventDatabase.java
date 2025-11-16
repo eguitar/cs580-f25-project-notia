@@ -4,7 +4,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class EventDatabase implements Iterable<Event> {
+    private static EventDatabase instance = null;
     private ArrayList<Event> eventList = new ArrayList<>();
+
+    private EventDatabase() {}
+
+    public static EventDatabase getInstance() {
+        if (instance == null) {
+            instance = new EventDatabase();
+        }
+        return instance;
+    }
 
     public void addEvent(Event event) { eventList.add(event); }
     public void removeEvent(Event event) { eventList.remove(event); }

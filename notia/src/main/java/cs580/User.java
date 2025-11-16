@@ -17,8 +17,21 @@ public class User {
     public void addEvent() {}
     public void removeEvent() {}
 
-    // public String getTaskDatabaseSummary() {}
-    // public String getEventDatabaseSummary() {}
+    public void displayTaskDatabaseSummary() {
+        System.out.println();
+        for (Task task : taskDatabase) {
+            System.out.println(task.getTaskSummary());
+        }
+        System.out.println();
+    }
+
+    public void displayEventDatabaseSummary() {
+        System.out.println();
+        for (Event event : eventDatabase) {
+            System.out.println(event.getEventSummary());
+        }
+        System.out.println();
+    }
 
     public boolean loginUser(String username, String password) {
         if (userInfo.validateUserLogin(username, password)) {

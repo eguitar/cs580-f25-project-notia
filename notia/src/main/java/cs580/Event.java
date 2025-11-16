@@ -43,7 +43,7 @@ public class Event {
     public String getEventNotes() { return notes; }
     public void setEventNotes(String notes) { this.notes = notes; }
 
-    public String getEventInfo() {
+    public String getEventSummary() {
         return "Event ID: " + eventID +
                "\nName: " + name +
                "\nDescription: " + description +
