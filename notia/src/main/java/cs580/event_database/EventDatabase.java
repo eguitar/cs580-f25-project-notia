@@ -2,6 +2,7 @@ package cs580.event_database;
 
 import cs580.event.Event;
 import cs580.exception_handling.ValidationExecutor;
+import cs580.exception_handling.Validators;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,8 +45,9 @@ public class EventDatabase implements Iterable<Event> {
     public void addEvent(Event e) {
         // Execute validation strategies
         ValidationExecutor.executeAll(
-                EventDatabaseValidations.notNull(e),
-                EventDatabaseValidations.notDuplicate(e, this)
+                Validators.illegalArgument().requireNonNull(e, EventDatabaseErrorMessage.EVENT_NULL.getMessage()),
+                Validators.illegalArgument().requireNull(this.getEventById(e.getEventID()),
+                        EventDatabaseErrorMessage.EVENT_ALREADY_EXISTS.format(e.getEventID()))
         );
 
         events.add(e);
@@ -59,7 +61,7 @@ public class EventDatabase implements Iterable<Event> {
      */
     public boolean deleteEvent(int eventId) {
         // Validate event ID
-        ValidationExecutor.execute(EventDatabaseValidations.validEventId(eventId));
+        Validators.illegalArgument().requireNonNegative(eventId, EventDatabaseErrorMessage.INVALID_EVENT_ID.format(eventId));
 
         Event event = getEventById(eventId);
         if (event != null) {
@@ -86,7 +88,7 @@ public class EventDatabase implements Iterable<Event> {
      */
     public Event getEventById(int eventId) {
         // Validate event ID
-        ValidationExecutor.execute(EventDatabaseValidations.validEventId(eventId));
+        Validators.illegalArgument().requireNonNegative(eventId, EventDatabaseErrorMessage.INVALID_EVENT_ID.format(eventId));
 
         for (Event event : events) {
             if (event.getEventID() == eventId) {
@@ -123,9 +125,11 @@ public class EventDatabase implements Iterable<Event> {
     public void updateEvent(int eventId, Map<String, Object> newInfo) {
         // Execute validation strategies
         ValidationExecutor.executeAll(
-                EventDatabaseValidations.validEventId(eventId),
-                EventDatabaseValidations.updateInfoValid(newInfo),
-                EventDatabaseValidations.exists(eventId, this)
+                Validators.illegalArgument().requireNonNegative(eventId, EventDatabaseErrorMessage.INVALID_EVENT_ID.format(eventId)),
+                Validators.illegalArgument().requireNonNull(newInfo, EventDatabaseErrorMessage.UPDATE_INFO_NULL_OR_EMPTY.getMessage()),
+                Validators.illegalArgument().requireCondition(!newInfo.isEmpty(), EventDatabaseErrorMessage.UPDATE_INFO_NULL_OR_EMPTY.getMessage()),
+                Validators.illegalArgument().requireNonNull(this.getEventById(eventId),
+                        EventDatabaseErrorMessage.EVENT_NOT_FOUND.format(eventId))
         );
 
         Event event = getEventById(eventId);

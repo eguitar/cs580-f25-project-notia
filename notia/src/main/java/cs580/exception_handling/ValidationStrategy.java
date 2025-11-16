@@ -1,7 +1,7 @@
 package cs580.exception_handling;
 
-// Strategy interface for validation
+// Generic validation strategy interface - supports any exception type
 @FunctionalInterface
-public interface ValidationStrategy {
-    void validate() throws IllegalArgumentException;
+public interface ValidationStrategy<E extends Exception> {
+    void validate() throws E;
 }

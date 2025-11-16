@@ -1,7 +1,6 @@
 package cs580.event;
 
-import cs580.exception_handling.DateValidator;
-import cs580.exception_handling.Validator;
+import cs580.exception_handling.Validators;
 
 import java.util.Date;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class Event {
 
     // Setters with validation using Validator utility
     public void setEventID(int eventID) {
-        Validator.requireNonNegative(eventID, EventErrorMessage.EVENT_ID_NEGATIVE.getMessage());
+        Validators.illegalArgument().requireNonNegative(eventID, EventErrorMessage.EVENT_ID_NEGATIVE.getMessage());
         this.eventID = eventID;
     }
 
@@ -42,8 +41,8 @@ public class Event {
     }
 
     public void setEventName(String name) {
-        Validator.requireNonEmpty(name, EventErrorMessage.EVENT_NAME_NULL_OR_EMPTY.getMessage());
-        this.name = Validator.sanitizeString(name);
+        Validators.illegalArgument().requireNonEmpty(name, EventErrorMessage.EVENT_NAME_NULL_OR_EMPTY.getMessage());
+        this.name = Validators.sanitizeString(name);
     }
 
     public String getEventDescription() {
@@ -51,7 +50,7 @@ public class Event {
     }
 
     public void setEventDescription(String description) {
-        this.description = Validator.sanitizeString(description);
+        this.description = Validators.sanitizeString(description);
     }
 
     public String getEventLocation() {
@@ -59,7 +58,7 @@ public class Event {
     }
 
     public void setEventLocation(String location) {
-        this.location = Validator.sanitizeString(location);
+        this.location = Validators.sanitizeString(location);
     }
 
     public Date getEventStartDate() {
@@ -67,7 +66,7 @@ public class Event {
     }
 
     public void setEventStartDate(Date startDate) {
-        DateValidator.validateDateRange(startDate, this.endDate,
+        Validators.DateValidator.requireRange(startDate, this.endDate,
                 EventErrorMessage.START_DATE_AFTER_END_DATE.getMessage());
         this.startDate = startDate;
     }
@@ -77,7 +76,7 @@ public class Event {
     }
 
     public void setEventEndDate(Date endDate) {
-        DateValidator.validateDateRange(this.startDate, endDate,
+        Validators.DateValidator.requireRange(this.startDate, endDate,
                 EventErrorMessage.END_DATE_BEFORE_START_DATE.getMessage());
         this.endDate = endDate;
     }
@@ -87,7 +86,7 @@ public class Event {
     }
 
     public void setEventNotes(String notes) {
-        this.notes = Validator.sanitizeString(notes);
+        this.notes = Validators.sanitizeString(notes);
     }
 
     // Implementation of getEventInfo() as specified in UML
@@ -113,8 +112,8 @@ public class Event {
 
     // Implementation of editEvent() - allows updating multiple fields at once
     public void editEvent(Map<String, Object> updates) {
-        Validator.requireNonNull(updates, EventErrorMessage.UPDATES_MAP_NULL.getMessage());
-        Validator.requireCondition(!updates.isEmpty(), EventErrorMessage.UPDATES_MAP_EMPTY.getMessage());
+        Validators.illegalArgument().requireNonNull(updates, EventErrorMessage.UPDATES_MAP_NULL.getMessage());
+        Validators.illegalArgument().requireCondition(!updates.isEmpty(), EventErrorMessage.UPDATES_MAP_EMPTY.getMessage());
 
         for (Map.Entry<String, Object> entry : updates.entrySet()) {
             updateField(entry.getKey(), entry.getValue());
@@ -129,7 +128,7 @@ public class Event {
 
     // Normalize field name for case-insensitive matching
     private String normalizeFieldName(String field) {
-        Validator.requireNonEmpty(field, EventErrorMessage.FIELD_NAME_NULL_OR_EMPTY.getMessage());
+        Validators.illegalArgument().requireNonEmpty(field, EventErrorMessage.FIELD_NAME_NULL_OR_EMPTY.getMessage());
         return field.trim();
     }
 
@@ -172,19 +171,19 @@ public class Event {
         private String notes;
 
         public EventBuilder(int eventID, String name) {
-            Validator.requireNonNegative(eventID, EventErrorMessage.EVENT_ID_NEGATIVE.getMessage());
-            Validator.requireNonEmpty(name, EventErrorMessage.EVENT_NAME_NULL_OR_EMPTY.getMessage());
+            Validators.illegalArgument().requireNonNegative(eventID, EventErrorMessage.EVENT_ID_NEGATIVE.getMessage());
+            Validators.illegalArgument().requireNonEmpty(name, EventErrorMessage.EVENT_NAME_NULL_OR_EMPTY.getMessage());
             this.eventID = eventID;
-            this.name = Validator.sanitizeString(name);
+            this.name = Validators.sanitizeString(name);
         }
 
         public EventBuilder description(String description) {
-            this.description = Validator.sanitizeString(description);
+            this.description = Validators.sanitizeString(description);
             return this;
         }
 
         public EventBuilder location(String location) {
-            this.location = Validator.sanitizeString(location);
+            this.location = Validators.sanitizeString(location);
             return this;
         }
 
@@ -199,12 +198,12 @@ public class Event {
         }
 
         public EventBuilder notes(String notes) {
-            this.notes = Validator.sanitizeString(notes);
+            this.notes = Validators.sanitizeString(notes);
             return this;
         }
 
         public Event build() {
-            DateValidator.validateDateRange(startDate, endDate,
+            Validators.DateValidator.requireRange(startDate, endDate,
                     EventErrorMessage.END_DATE_BEFORE_START_DATE.getMessage());
             return new Event(this);
         }
