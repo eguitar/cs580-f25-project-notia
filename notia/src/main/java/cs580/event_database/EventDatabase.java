@@ -1,4 +1,4 @@
-package cs580.even_database;
+package cs580.event_database;
 
 import cs580.event.Event;
 import cs580.exception_handling.ValidationExecutor;

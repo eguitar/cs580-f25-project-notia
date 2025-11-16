@@ -1,7 +1,7 @@
 package cs580;
 
-import cs580.even_database.EventDatabase;
 import cs580.event.Event;
+import cs580.event_database.EventDatabase;
 
 public class User {
     private UserData userInfo;

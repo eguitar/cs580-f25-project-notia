@@ -1,4 +1,4 @@
-package cs580.even_database;
+package cs580.event_database;
 
 // Enum for all EventDatabase-related error messages
 public enum EventDatabaseErrorMessage {
