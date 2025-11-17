@@ -42,6 +42,7 @@ public class ValidationExecutor {
      */
     @SafeVarargs
     public static <E extends Exception> void executeAll(ValidationStrategy<E>... strategies) throws E {
+        if (strategies == null) return;
         for (ValidationStrategy<E> strategy : strategies) {
             strategy.validate();
         }
