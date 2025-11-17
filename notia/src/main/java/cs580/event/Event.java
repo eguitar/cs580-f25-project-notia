@@ -1,5 +1,6 @@
 package cs580.event;
 
+import cs580.exception_handling.ValidationExecutor;
 import cs580.exception_handling.Validators;
 
 import java.util.Date;
@@ -32,7 +33,8 @@ public class Event {
 
     // Setters with validation using Validator utility
     public void setEventID(int eventID) {
-        Validators.illegalArgument().requireNonNegative(eventID, EventErrorMessage.EVENT_ID_NEGATIVE.getMessage());
+        ValidationExecutor.execute(Validators.illegalArgument().requireNonNegative(eventID,
+                EventErrorMessage.EVENT_ID_NEGATIVE.getMessage()));
         this.eventID = eventID;
     }
 
@@ -41,7 +43,8 @@ public class Event {
     }
 
     public void setEventName(String name) {
-        Validators.illegalArgument().requireNonEmpty(name, EventErrorMessage.EVENT_NAME_NULL_OR_EMPTY.getMessage());
+        ValidationExecutor.execute(Validators.illegalArgument().requireNonEmpty(name,
+                EventErrorMessage.EVENT_NAME_NULL_OR_EMPTY.getMessage()));
         this.name = Validators.sanitizeString(name);
     }
 
@@ -112,8 +115,10 @@ public class Event {
 
     // Implementation of editEvent() - allows updating multiple fields at once
     public void editEvent(Map<String, Object> updates) {
-        Validators.illegalArgument().requireNonNull(updates, EventErrorMessage.UPDATES_MAP_NULL.getMessage());
-        Validators.illegalArgument().requireCondition(!updates.isEmpty(), EventErrorMessage.UPDATES_MAP_EMPTY.getMessage());
+        ValidationExecutor.execute(Validators.illegalArgument().requireNonNull(updates,
+                EventErrorMessage.UPDATES_MAP_NULL.getMessage()));
+        ValidationExecutor.execute(Validators.illegalArgument().requireCondition(!updates.isEmpty(),
+                EventErrorMessage.UPDATES_MAP_EMPTY.getMessage()));
 
         for (Map.Entry<String, Object> entry : updates.entrySet()) {
             updateField(entry.getKey(), entry.getValue());
@@ -128,7 +133,8 @@ public class Event {
 
     // Normalize field name for case-insensitive matching
     private String normalizeFieldName(String field) {
-        Validators.illegalArgument().requireNonEmpty(field, EventErrorMessage.FIELD_NAME_NULL_OR_EMPTY.getMessage());
+        ValidationExecutor.execute(Validators.illegalArgument().requireNonEmpty(field,
+                EventErrorMessage.FIELD_NAME_NULL_OR_EMPTY.getMessage()));
         return field.trim();
     }
 
@@ -171,8 +177,11 @@ public class Event {
         private String notes;
 
         public EventBuilder(int eventID, String name) {
-            Validators.illegalArgument().requireNonNegative(eventID, EventErrorMessage.EVENT_ID_NEGATIVE.getMessage());
-            Validators.illegalArgument().requireNonEmpty(name, EventErrorMessage.EVENT_NAME_NULL_OR_EMPTY.getMessage());
+            ValidationExecutor.executeAll(Validators.illegalArgument().requireNonNegative(eventID,
+                            EventErrorMessage.EVENT_ID_NEGATIVE.getMessage()),
+                    Validators.illegalArgument().requireNonEmpty(name,
+                            EventErrorMessage.EVENT_NAME_NULL_OR_EMPTY.getMessage()));
+
             this.eventID = eventID;
             this.name = Validators.sanitizeString(name);
         }

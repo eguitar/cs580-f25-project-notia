@@ -44,11 +44,10 @@ public class EventDatabase implements Iterable<Event> {
      */
     public void addEvent(Event e) {
         // Execute validation strategies
-        ValidationExecutor.executeAll(
-                Validators.illegalArgument().requireNonNull(e, EventDatabaseErrorMessage.EVENT_NULL.getMessage()),
-                Validators.illegalArgument().requireNull(this.getEventById(e.getEventID()),
-                        EventDatabaseErrorMessage.EVENT_ALREADY_EXISTS.format(e.getEventID()))
-        );
+        ValidationExecutor.execute(Validators.illegalArgument().requireNonNull(e,
+                EventDatabaseErrorMessage.EVENT_NULL.getMessage()));
+        ValidationExecutor.execute(Validators.illegalArgument().requireNull(this.getEventById(e.getEventID()),
+                EventDatabaseErrorMessage.EVENT_ALREADY_EXISTS.format(e.getEventID())));
 
         events.add(e);
     }
@@ -61,7 +60,8 @@ public class EventDatabase implements Iterable<Event> {
      */
     public boolean deleteEvent(int eventId) {
         // Validate event ID
-        Validators.illegalArgument().requireNonNegative(eventId, EventDatabaseErrorMessage.INVALID_EVENT_ID.format(eventId));
+        ValidationExecutor.execute(Validators.illegalArgument().requireNonNegative(eventId,
+                EventDatabaseErrorMessage.INVALID_EVENT_ID.format(eventId)));
 
         Event event = getEventById(eventId);
         if (event != null) {
@@ -88,7 +88,8 @@ public class EventDatabase implements Iterable<Event> {
      */
     public Event getEventById(int eventId) {
         // Validate event ID
-        Validators.illegalArgument().requireNonNegative(eventId, EventDatabaseErrorMessage.INVALID_EVENT_ID.format(eventId));
+        ValidationExecutor.execute(Validators.illegalArgument().requireNonNegative(eventId,
+                EventDatabaseErrorMessage.INVALID_EVENT_ID.format(eventId)));
 
         for (Event event : events) {
             if (event.getEventID() == eventId) {
@@ -125,9 +126,10 @@ public class EventDatabase implements Iterable<Event> {
     public void updateEvent(int eventId, Map<String, Object> newInfo) {
         // Execute validation strategies
         ValidationExecutor.executeAll(
-                Validators.illegalArgument().requireNonNegative(eventId, EventDatabaseErrorMessage.INVALID_EVENT_ID.format(eventId)),
-                Validators.illegalArgument().requireNonNull(newInfo, EventDatabaseErrorMessage.UPDATE_INFO_NULL_OR_EMPTY.getMessage()),
-                Validators.illegalArgument().requireCondition(!newInfo.isEmpty(), EventDatabaseErrorMessage.UPDATE_INFO_NULL_OR_EMPTY.getMessage()),
+                Validators.illegalArgument().requireNonNegative(eventId,
+                        EventDatabaseErrorMessage.INVALID_EVENT_ID.format(eventId)),
+                Validators.illegalArgument().requireCondition(newInfo != null && !newInfo.isEmpty(),
+                        EventDatabaseErrorMessage.UPDATE_INFO_NULL_OR_EMPTY.getMessage()),
                 Validators.illegalArgument().requireNonNull(this.getEventById(eventId),
                         EventDatabaseErrorMessage.EVENT_NOT_FOUND.format(eventId))
         );
