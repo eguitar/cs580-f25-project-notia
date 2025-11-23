@@ -11,9 +11,8 @@ public class Event {
     private Date endDate;
     private String notes;
 
-    public Event(int eventID, String name, String description,
+    public Event(String name, String description,
                  String location, Date startDate, Date endDate, String notes) {
-        this.eventID = eventID;
         this.name = name;
         this.description = description;
         this.location = location;
@@ -21,6 +20,17 @@ public class Event {
         this.endDate = endDate;
         this.notes = notes;
     }
+
+    public Event(Event event) {
+        this.eventID = event.eventID;
+        this.name = event.name;
+        this.description = event.description;
+        this.location = event.location;
+        this.startDate = (event.startDate != null) ? new Date(event.startDate.getTime()) : null;
+        this.endDate = (event.endDate != null) ? new Date(event.endDate.getTime()) : null;
+        this.notes = event.notes;
+    }
+
 
     public int getEventID() { return eventID; }
     public void setEventID(int eventID) { this.eventID = eventID; }

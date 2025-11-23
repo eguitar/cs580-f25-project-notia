@@ -4,20 +4,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class EventDatabase implements Iterable<Event> {
-    private static EventDatabase instance = null;
     private ArrayList<Event> eventList = new ArrayList<>();
+    private int eventID = 0;
 
-    private EventDatabase() {}
-
-    public static EventDatabase getInstance() {
-        if (instance == null) {
-            instance = new EventDatabase();
+    public void addEvent(Event event) {
+        event.setEventID(eventID);
+        eventList.add(event);
+        eventID++;
+    }
+    public boolean removeEvent(int eventID) {
+        for (int i = 0; i < eventList.size(); i++) {
+            if (eventList.get(i).getEventID() == eventID) {
+                eventList.remove(i);
+                return true;
+            }
         }
-        return instance;
+        return false;
     }
 
-    public void addEvent(Event event) { eventList.add(event); }
-    public void removeEvent(Event event) { eventList.remove(event); }
     public ArrayList<Event> getEventList() { return eventList; }
 
     public Event getEventByID(int eventID) {
@@ -37,6 +41,32 @@ public class EventDatabase implements Iterable<Event> {
         }
         return null;
     }
+
+    public boolean updateEventByID(int eventID, Event newEvent) {
+        for (int i = 0; i < eventList.size(); i++) {
+            if (eventList.get(i).getEventID() == eventID) {
+                newEvent.setEventID(eventID);
+                eventList.set(i, newEvent);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public EventDatabaseMemento createMemento() {
+        return new EventDatabaseMemento(new ArrayList<>(eventList), eventID);
+    }
+
+    public void restoreFromMemento(EventDatabaseMemento memento) {
+        this.eventList = memento.getEventListSnapshot();
+        this.eventID = memento.getEventIDSnapshot();
+    }
+
+    public void sortEvents(EventSortStrategy strategy) {
+        strategy.sort(eventList);
+    }
+
+    public ArrayList<Event> getAllEvents() { return eventList; }
 
     @Override
     public Iterator<Event> iterator() {

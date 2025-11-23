@@ -1,6 +1,7 @@
 package cs580;
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class Task {
@@ -11,14 +12,22 @@ public class Task {
     private ArrayList<String> tags;
     private String notes;
 
-    public Task(int taskID, String name, String description, 
+    public Task(String name, String description, 
                 Date date, ArrayList<String> tags, String notes) {
-        this.taskID = taskID;
         this.name = name;
         this.description = description;
         this.date = date;
         this.tags = tags;
         this.notes = notes;
+    }
+
+    public Task(Task task) {
+        this.taskID = task.taskID;
+        this.name = task.name;
+        this.description = task.description;
+        this.date = (task.date != null) ? new Date(task.date.getTime()) : null;
+        this.tags = (task.tags != null) ? new ArrayList<>(task.tags) : null;
+        this.notes = task.notes;
     }
 
     public int getTaskID() { return taskID; }
@@ -40,10 +49,13 @@ public class Task {
     public void setTaskNotes(String notes) { this.notes = notes; }
 
     public String getTaskSummary() {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = (date != null) ? fmt.format(date) : "N/A";
+
         return "Task ID: " + taskID +
                "\nName: " + name +
                "\nDescription: " + description +
-               "\nDate: " + date +
+               "\nDate: " + dateString +
                "\nTags: " + tags +
                "\nNotes: " + notes;
     }
