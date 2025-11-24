@@ -1,9 +1,9 @@
 package cs580;
 
 public class User {
-    private UserData userInfo;
-    private TaskDatabase taskDatabase;
-    private EventDatabase eventDatabase;
+    private final UserData userInfo;
+    private final TaskDatabase taskDatabase;
+    private final EventDatabase eventDatabase;
     private UserMemento lastMemento;
 
     public User(UserData userInfo) {
