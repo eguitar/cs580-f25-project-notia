@@ -132,63 +132,9 @@ public class Main {
                 try {
                     switch(action) {
                         case 1:
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            System.out.println("ENTER TASK NAME ------------------------");
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            String taskName = scanner.nextLine();
-
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            System.out.println("ENTER TASK DESCRIPTION -----------------");
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            String taskDescription = scanner.nextLine();
-
-                            sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            sdf.setLenient(false);
-                            taskDate = null;
-                            validDate = false;
-
-                            while (!validDate) {
-                                System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                System.out.println("ENTER TASK DATE (format: yyyy-MM-dd) ---");
-                                System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                String inputDate = scanner.nextLine();
-                                try {
-                                    taskDate = sdf.parse(inputDate);
-                                    validDate = true;
-                                } catch (ParseException e) {
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    System.out.println("INVALID FORMAT ----- ENTER AS YYYY-MM-DD");
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                }
-                            }
-
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            System.out.println("ENTER TASK TAGS (comma separated) ------");
-                            System.out.println("Ex. tag1,tag2,tag3 ---------------------");
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            String tagsInput = scanner.nextLine();
-
-                            ArrayList<String> tags = new ArrayList<>();
-                            if (!tagsInput.trim().isEmpty()) {
-                                String[] tagsArray = tagsInput.split(",");
-                                for (String tag : tagsArray) {
-                                    tags.add(tag.trim());
-                                }
-                            }
-
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            System.out.println("ENTER TASK NOTES -----------------------");
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            String taskNotes = scanner.nextLine();
-
-                            newTask = new Task(taskName, taskDescription, taskDate, tags, taskNotes);
+                            newTask = TaskFactory.getInstance(scanner).createItem();
                             currentUser.addTask(newTask);
-
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            System.out.println("TASK SUCCESSFULLY CREATED --------------");
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             break;
-
                         case 2:
                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             System.out.println("PLEASE ENTER THE ID OF THE TASK --------");
@@ -339,75 +285,8 @@ public class Main {
                             }
                             break;
                         case 5:
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            System.out.println("ENTER EVENT NAME -----------------------");
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            String eventName = scanner.nextLine();
-
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            System.out.println("ENTER EVENT DESCRIPTION ----------------");
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            String eventDescription = scanner.nextLine();
-
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            System.out.println("ENTER EVENT LOCATION -------------------");
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            String eventLocation = scanner.nextLine();
-
-                            sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            sdf.setLenient(false);
-                            eventStartDate = null;
-                            eventEndDate = null;
-                            boolean validStartDate = false;
-                            boolean validEndDate = false;
-
-                            while (!validStartDate) {
-                                System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                System.out.println("ENTER EVENT START DATE (format: yyyy-MM-dd)");
-                                System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                String inputStartDate = scanner.nextLine();
-                                try {
-                                    eventStartDate = sdf.parse(inputStartDate);
-                                    validStartDate = true;
-                                } catch (ParseException e) {
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    System.out.println("INVALID FORMAT ----- ENTER AS YYYY-MM-DD");
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                }
-                            }
-
-                            while (!validEndDate) {
-                                System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                System.out.println("ENTER EVENT END DATE (format: yyyy-MM-dd)");
-                                System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                String inputEndDate = scanner.nextLine();
-                                try {
-                                    eventEndDate = sdf.parse(inputEndDate);
-                                    if (eventEndDate.before(eventStartDate)) {
-                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                        System.out.println("INVALID DATE -- MUST BE AFTER START DATE");
-                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    } else {
-                                        validEndDate = true;
-                                    }
-                                } catch (ParseException e) {
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    System.out.println("INVALID FORMAT ----- ENTER AS YYYY-MM-DD");
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                }
-                            }
-
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            System.out.println("ENTER EVENT NOTES ----------------------");
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            String eventNotes = scanner.nextLine();
-
-                            newEvent = new Event(eventName, eventDescription, eventLocation, eventStartDate, eventEndDate, eventNotes);
+                            newEvent = EventFactory.getInstance(scanner).createItem();
                             currentUser.addEvent(newEvent);
-
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            System.out.println("EVENT SUCCESSFULLY CREATED -------------");
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             break;
                         case 6:
                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
