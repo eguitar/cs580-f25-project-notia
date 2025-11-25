@@ -1,158 +1,96 @@
 package cs580;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import java.text.SimpleDateFormat;
-import java.util.*;
+
+import org.junit.jupiter.api.*;
+import java.util.ArrayList;
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class TaskDatabaseTest {
+public class TaskDatabaseTest {
 
     private TaskDatabase db;
 
     @BeforeEach
-    void setUp() {
+    public void setup() {
         db = new TaskDatabase();
     }
 
-    private Task mkTask(int id, String name, String notes) {
-        Task t = new Task();
-        Map<String, Object> init = new HashMap<>();
-        init.put("taskId", id);
-        init.put("name", name);
-        init.put("description", "desc");
-        init.put("dueDate", new Date());
-        init.put("tags", new ArrayList<>(List.of("init")));
-        init.put("notes", notes);
-        t.editTask(init);
-        return t;
-    }
+    @Test
+    public void testAddAndGetTask() {
+        Task task = new Task("Code Review", "Review PR", new Date(), new ArrayList<>(), "Check tests");
+        db.addTask(task);
+        int id = task.getTaskID();
+        Task fetched = db.getTaskByID(id);
 
-    private Task mkTask(int id, String name) {
-        Task t = new Task();
-        Map<String, Object> init = new HashMap<>();
-        init.put("taskId", id);
-        init.put("name", name);
-        init.put("description", "D-" + id);
-        init.put("dueDate", new Date());
-        init.put("tags", List.of("tag" + id));
-        init.put("notes", "N-" + id);
-        t.editTask(init);
-        return t;
+        assertNotNull(fetched);
+        assertEquals("Code Review", fetched.getTaskName());
+        assertEquals(id, fetched.getTaskID());
     }
 
     @Test
-    void testAddTask_thenGetById_andGetAllTasks() {
-        Task t1 = mkTask(1, "A");
-        Task t2 = mkTask(2, "B");
-        db.addTask(t1);
-        db.addTask(t2);
+    public void testRemoveTask() {
+        Task task = new Task("Bug Fix", "Fix login bug", new Date(), new ArrayList<>(), null);
+        db.addTask(task);
+        int id = task.getTaskID();
 
-        assertEquals(2, db.getAllTasks().size());
-        assertTrue(db.getTaskById(1).getTaskInfo().contains("A"));
-        assertNotNull(db.getTaskById(2));
-        assertNull(db.getTaskById(999));
+        boolean removed = db.removeTask(id);
+        assertTrue(removed);
+        assertNull(db.getTaskByID(id));
     }
 
     @Test
-    void testDeleteTask_removesTask_without_affectingOthers() {
-        db.addTask(mkTask(10, "Keep"));
-        db.addTask(mkTask(11, "DeleteMe"));
+    public void testUpdateTask() {
+        Task task = new Task("Design Doc", "Create design document", new Date(), new ArrayList<>(), "Initial draft");
+        db.addTask(task);
+        int id = task.getTaskID();
 
-        db.deleteTask(11);
+        Task newTask = new Task("Design Doc Updated", "Updated design", new Date(), new ArrayList<>(), "Final draft");
+        boolean updated = db.updateTaskByID(id, newTask);
 
-        assertNull(db.getTaskById(11));
-        assertNotNull(db.getTaskById(10));
-        assertEquals(1, db.getAllTasks().size());
+        assertTrue(updated);
+        Task fetched = db.getTaskByID(id);
+        assertEquals("Design Doc Updated", fetched.getTaskName());
+        assertEquals(id, fetched.getTaskID());
     }
 
     @Test
-    void testUpdateTask_appliesChanges_onExistingTask() {
-        db.addTask(mkTask(20, "Old"));
+    public void testGetTaskByName() {
+        Task task = new Task("Deploy", "Deploy to production", new Date(), new ArrayList<>(), "Notify team");
+        db.addTask(task);
 
-        Map<String, Object> patch = new HashMap<>();
-        patch.put("name", "New");
-        patch.put("tags", List.of("x", "y"));
-        db.updateTask(20, patch);
+        Task fetched = db.getTaskByName("Deploy");
+        assertNotNull(fetched);
+        assertEquals("Deploy", fetched.getTaskName());
 
-        String info = db.getTaskById(20).getTaskInfo();
-        assertAll(
-            () -> assertTrue(info.contains("New")),
-            () -> assertTrue(info.contains("x")),
-            () -> assertTrue(info.contains("y")),
-            () -> assertFalse(info.contains("Old"))
-        );
+        Task notFound = db.getTaskByName("Nonexistent");
+        assertNull(notFound);
     }
 
     @Test
-    void testDisplayAllTasks_printsAllTasks() {
-        db.addTask(mkTask(30, "Alpha"));
-        db.addTask(mkTask(31, "Beta"));
+    public void testCreateAndRestoreMemento() {
+        Task task = new Task("Refactor", "Refactor codebase", new Date(), new ArrayList<>(), null);
+        db.addTask(task);
 
-        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-        java.io.PrintStream original = System.out;
-        System.setOut(new java.io.PrintStream(baos));
-        try {
-            db.displayAllTasks();
-        } finally {
-            System.setOut(original);
+        TaskDatabaseMemento memento = db.createMemento();
+        db.removeTask(task.getTaskID());
+        assertNull(db.getTaskByID(task.getTaskID()));
+
+        db.restoreFromMemento(memento);
+        assertNotNull(db.getTaskByID(task.getTaskID()));
+    }
+
+    @Test
+    public void testIterator() {
+        Task task1 = new Task("Task1", "Desc1", new Date(), new ArrayList<>(), null);
+        Task task2 = new Task("Task2", "Desc2", new Date(), new ArrayList<>(), null);
+        db.addTask(task1);
+        db.addTask(task2);
+
+        int count = 0;
+        for (Task t : db) {
+            assertNotNull(t);
+            count++;
         }
-
-        String out = baos.toString();
-        assertTrue(out.contains("Alpha"));
-        assertTrue(out.contains("Beta"));
-    }
-
-    @Test
-    void testUpdateTask_delegatesToTaskEdit_andMutatesSharedInstance() throws Exception {
-        Task t = mkTask(200, "Before", "notes");
-        db.addTask(t);
-
-        Date newDue = new SimpleDateFormat("yyyy-MM-dd").parse("2025-11-30");
-        Map<String, Object> patch = new HashMap<>();
-        patch.put("name", "After");
-        patch.put("dueDate", newDue);
-        patch.put("tags", List.of("a", "b", "c"));
-
-        db.updateTask(200, patch);
-
-        String info = t.getTaskInfo();
-        assertAll(
-            () -> assertTrue(info.contains("After")),
-            () -> assertTrue(info.contains("a")),
-            () -> assertTrue(info.contains("b")),
-            () -> assertTrue(info.contains("c")),
-            () -> assertTrue(info.contains("2025") || info.contains("11") || info.contains("30"))
-        );
-    }
-
-    @Test
-    void testDeleteTask_removesFromContainer_andFromDisplay() {
-        db.addTask(mkTask(300, "Keep", "k"));
-        db.addTask(mkTask(301, "Gone", "g"));
-
-        db.deleteTask(301);
-
-        assertTrue(db.getAllTasks().stream().noneMatch(t -> t.getTaskInfo().contains("Gone")));
-
-        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-        java.io.PrintStream original = System.out;
-        System.setOut(new java.io.PrintStream(baos));
-        try {
-            db.displayAllTasks();
-        } finally {
-            System.setOut(original);
-        }
-        String out = baos.toString();
-        assertTrue(out.contains("Keep"));
-        assertFalse(out.contains("Gone"));
-    }
-
-    @Test
-    void testGetTaskById_returnsSameInstance_thatWasAdded() {
-        Task t = mkTask(400, "SameRef", "n");
-        db.addTask(t);
-
-        Task fetched = db.getTaskById(400);
-        assertSame(t, fetched, "DB should store and return the same Task instance (composition/containment)");
+        assertEquals(2, count);
     }
 }

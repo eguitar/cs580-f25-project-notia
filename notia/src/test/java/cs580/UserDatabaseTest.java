@@ -1,50 +1,48 @@
 package cs580;
+
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserDatabaseTest {
 
     @Test
-    public void testAddUserWithValidUser() {}
+    public void testSingleton() {
+        UserDatabase db1 = UserDatabase.getInstance();
+        UserDatabase db2 = UserDatabase.getInstance();
+        assertSame(db1, db2);
+    }
 
     @Test
-    public void testAddUserWithNullUser() {}
+    public void testAddRemoveUser() {
+        UserDatabase db = UserDatabase.getInstance();
+        int initialSize = db.getUserList().size();
+
+        UserData ud = new UserData("F", "L", "un", "pw", "email");
+        User user = new User(ud);
+
+        db.addUser(user);
+        assertEquals(initialSize + 1, db.getUserList().size());
+
+        db.removeUser(user);
+        assertEquals(initialSize, db.getUserList().size());
+    }
 
     @Test
-    public void testDeleteUserValidId() {}
+    public void testFindUser() {
+        UserDatabase db = UserDatabase.getInstance();
 
-    @Test
-    public void testDeleteUserInvalidId() {}
+        UserData ud = new UserData("First", "Last", "username123", "pass123", "email@example.com");
+        User user = new User(ud);
+        db.addUser(user);
 
-    @Test
-    public void testLoginWithValidCredentials() {}
+        User found = db.findUser("username123", "pass123");
+        assertNotNull(found);
+        assertEquals("username123", ud.getUserDataSummary().split("\n")[2].split(": ")[1]);
 
-    @Test
-    public void testLoginWithInvalidCredentials() {}
+        User notFound = db.findUser("username123", "wrongpass");
+        assertNull(notFound);
 
-    @Test
-    public void testLogoutValidUserId() {}
-
-    @Test
-    public void testLogoutInvalidUserId() {}
-
-    @Test
-    public void testGetUserByIdValidId() {}
-
-    @Test
-    public void testGetUserByIdInvalidId() {}
-
-    @Test
-    public void testValidateUserValidInput() {}
-
-    @Test
-    public void testValidateUserInvalidInput() {}
-
-    @Test
-    public void testAddDuplicateUser() {}
-
-    @Test
-    public void testDeleteUserFromEmptyDatabase() {}
-
-    @Test
-    public void testUsersListNotNull() {}
+        db.removeUser(user);
+    }
 }

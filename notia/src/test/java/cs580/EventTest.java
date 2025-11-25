@@ -81,7 +81,6 @@ public class EventTest {
         assertEquals(e1.getEventEndDate(), e2.getEventEndDate());
         assertEquals(e1.getEventNotes(), e2.getEventNotes());
 
-        // Defensive copy for Date fields: changes to original Dates should not affect the copy
         start.setTime(0L);
         end.setTime(0L);
         assertNotEquals(start, e2.getEventStartDate());

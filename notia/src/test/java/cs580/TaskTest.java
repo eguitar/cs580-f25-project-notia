@@ -1,62 +1,108 @@
 package cs580;
 
-import java.text.SimpleDateFormat;
+import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskTest {
 
     @Test
-    public void testTaskValidInitialization() throws Exception {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date d = sdf.parse("2025-11-24");
+    public void testTaskValidInitialization() {
+        Date date = new Date(1700000000000L);
         ArrayList<String> tags = new ArrayList<>();
+        tags.add("urgent");
         tags.add("home");
-        Task t = new Task("Buy milk", "Buy 2 gallons", d, tags, "Remember coupon");
-        assertEquals("Buy milk", t.getTaskName());
-        assertEquals("Buy 2 gallons", t.getTaskDescription());
-        assertEquals(d, t.getTaskDate());
-        assertEquals(tags, t.getTaskTags());
-        assertEquals("Remember coupon", t.getTaskNotes());
+
+        Task task = new Task("Homework", "Math exercises", date, tags, "Do before Monday");
+        task.setTaskID(101);
+
+        assertEquals(101, task.getTaskID());
+        assertEquals("Homework", task.getTaskName());
+        assertEquals("Math exercises", task.getTaskDescription());
+        assertEquals(date, task.getTaskDate());
+        assertEquals(tags, task.getTaskTags());
+        assertEquals("Do before Monday", task.getTaskNotes());
+
+        String summary = task.getTaskSummary();
+        assertTrue(summary.contains("101"));
+        assertTrue(summary.contains("Homework"));
+        assertTrue(summary.contains("Math exercises"));
+        assertTrue(summary.contains("urgent"));
+        assertTrue(summary.contains("Do before Monday"));
     }
 
     @Test
-    public void testTaskNullDateAndTags() {
-        Task t = new Task("NoDate", "desc", null, null, null);
-        assertNull(t.getTaskDate());
-        assertNull(t.getTaskTags());
-        assertNull(t.getTaskNotes());
-    }
-
-    @Test
-    public void testTaskCopyConstructorDeepCopy() throws Exception {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date d = sdf.parse("2025-11-24");
+    public void testTaskCopyConstructor() {
+        Date date = new Date(1700000000000L);
         ArrayList<String> tags = new ArrayList<>();
-        tags.add("a");
-        Task t1 = new Task("A", "B", d, tags, "N");
-        Task t2 = new Task(t1);
-        assertEquals(t1.getTaskName(), t2.getTaskName());
-        assertNotSame(t1.getTaskTags(), t2.getTaskTags());
-        t1.getTaskTags().add("new");
-        assertFalse(t2.getTaskTags().contains("new"));
+        tags.add("work");
+
+        Task original = new Task("Project", "Complete report", date, tags, "Check references");
+        original.setTaskID(202);
+
+        Task copy = new Task(original);
+
+        assertEquals(original.getTaskID(), copy.getTaskID());
+        assertEquals(original.getTaskName(), copy.getTaskName());
+        assertEquals(original.getTaskDescription(), copy.getTaskDescription());
+        assertEquals(original.getTaskDate(), copy.getTaskDate());
+        assertEquals(original.getTaskTags(), copy.getTaskTags());
+        assertEquals(original.getTaskNotes(), copy.getTaskNotes());
+
+        // Mutate original date and tags to ensure deep copy
+        date.setTime(0L);
+        tags.add("extra");
+
+        assertNotEquals(date, copy.getTaskDate());
+        assertFalse(copy.getTaskTags().contains("extra"));
     }
 
     @Test
-    public void testGetTaskSummaryFormatting() throws Exception {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date d = sdf.parse("2025-11-24");
-        Task t = new Task("Name", "Desc", d, new ArrayList<>(), "Notes");
-        String summary = t.getTaskSummary();
-        assertTrue(summary.contains("Task ID:"));
-        assertTrue(summary.contains("Name: Name"));
-        assertTrue(summary.contains("Date: 2025-11-24"));
+    public void testSettersAndGetters() {
+        Task task = new Task(null, null, null, null, null);
+
+        task.setTaskID(303);
+        assertEquals(303, task.getTaskID());
+
+        task.setTaskName("Shopping");
+        assertEquals("Shopping", task.getTaskName());
+
+        task.setTaskDescription("Buy groceries");
+        assertEquals("Buy groceries", task.getTaskDescription());
+
+        Date now = new Date();
+        task.setTaskDate(now);
+        assertEquals(now, task.getTaskDate());
+
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add("errands");
+        task.setTaskTags(tags);
+        assertEquals(tags, task.getTaskTags());
+
+        task.setTaskNotes("Use discount coupons");
+        assertEquals("Use discount coupons", task.getTaskNotes());
+    }
+
+    @Test
+    public void testSettersAcceptNulls() {
+        Date date = new Date();
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add("test");
+
+        Task task = new Task("Title", "Desc", date, tags, "Notes");
+
+        task.setTaskName(null);
+        task.setTaskDescription(null);
+        task.setTaskDate(null);
+        task.setTaskTags(null);
+        task.setTaskNotes(null);
+
+        assertNull(task.getTaskName());
+        assertNull(task.getTaskDescription());
+        assertNull(task.getTaskDate());
+        assertNull(task.getTaskTags());
+        assertNull(task.getTaskNotes());
     }
 }
