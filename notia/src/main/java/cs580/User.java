@@ -4,12 +4,14 @@ public class User {
     private final UserData userInfo;
     private final TaskDatabase taskDatabase;
     private final EventDatabase eventDatabase;
+    private final BirthdayDatabase birthdayDatabase;
     private UserMemento lastMemento;
 
     public User(UserData userInfo) {
         this.userInfo = userInfo;
         this.taskDatabase = new TaskDatabase();
         this.eventDatabase = new EventDatabase();
+        this.birthdayDatabase = new BirthdayDatabase();
     }
 
     public void addTask(Task task) {
@@ -90,6 +92,30 @@ public class User {
         }
         else {
             return false;
+        }
+    }
+
+    public void addBirthday(Birthday b) {
+        birthdayDatabase.addBirthday(b);
+    }
+
+    public boolean removeBirthday(int id) {
+        return birthdayDatabase.removeBirthday(id);
+    }
+
+    public Birthday getBirthday(int id) {
+        return birthdayDatabase.getBirthday(id);
+    }
+
+    public boolean editBirthday(int id, Birthday newB) {
+        return birthdayDatabase.updateBirthday(id, newB);
+    }
+
+    public void displayBirthdays() {
+        System.out.println("----------------------------------------");
+        for (Birthday b : birthdayDatabase) {
+            System.out.println(b.getBirthdaySummary());
+            System.out.println("----------------------------------------");
         }
     }
 }

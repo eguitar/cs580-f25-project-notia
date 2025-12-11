@@ -6,19 +6,18 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        
+
         Scanner scanner = new Scanner(System.in);
         UserDatabase users = UserDatabase.getInstance();
         User currentUser = null;
         boolean running = true;
         int action;
         String username, password;
-        int taskID, eventID;
-        SimpleDateFormat sdf;
-        Date taskDate, eventStartDate, eventEndDate;
+        int taskID, eventID, birthdayID;
         boolean validDate;
         Task newTask;
         Event newEvent;
+        Birthday newBirthday;
 
         while (running) {
             if (currentUser == null) {
@@ -118,12 +117,13 @@ public class Main {
                 System.out.println("4.  VIEW TASKS -------------------------");
                 System.out.println("5.  ADD EVENT --------------------------");
                 System.out.println("6.  REMOVE EVENT -----------------------");
-                System.out.println("7.  EDIT EVENT --------------------------");
+                System.out.println("7.  EDIT EVENT -------------------------");
                 System.out.println("8.  VIEW EVENTS ------------------------");
                 System.out.println("9.  REDO LAST ADD / REMOVE / EDIT ------");
                 System.out.println("10. VIEW USER INFO ---------------------");
                 System.out.println("11. SIGN OUT OF USER -------------------");
                 System.out.println("12. DELETE USER ACC --------------------");
+                System.out.println("13. BIRTHDAY MENU ----------------------");
                 System.out.println("################################################################################");
 
                 action = scanner.nextInt();
@@ -135,6 +135,7 @@ public class Main {
                             newTask = TaskFactory.getInstance(scanner).createItem();
                             currentUser.addTask(newTask);
                             break;
+
                         case 2:
                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             System.out.println("PLEASE ENTER THE ID OF THE TASK --------");
@@ -191,7 +192,8 @@ public class Main {
                                     System.out.println("TASK NAME UPDATED ----------------------");
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                     break;
-                                case 2: 
+
+                                case 2:
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                     System.out.println("ENTER NEW TASK DESCRIPTION -------------");
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
@@ -201,13 +203,14 @@ public class Main {
                                     System.out.println("TASK DESCRIPTION UPDATED ----------------");
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                     break;
+
                                 case 3:
-                                    sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                                     sdf.setLenient(false);
                                     Date newDate = null;
                                     boolean validDate2 = false;
 
-                                    while (!validDate2) {
+                                    while(!validDate2) {
                                         System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                         System.out.println("ENTER NEW TASK DATE (FORMAT: YYYY-MM-DD)");
                                         System.out.println("++++++++++++++++++++++++++++++++++++++++");
@@ -215,7 +218,7 @@ public class Main {
                                         try {
                                             newDate = sdf.parse(dateStr);
                                             validDate2 = true;
-                                        } catch (ParseException e) {
+                                        } catch(ParseException e) {
                                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                             System.out.println("INVALID FORMAT ----- ENTER AS YYYY-MM-DD");
                                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
@@ -226,6 +229,7 @@ public class Main {
                                     System.out.println("TASK DATE UPDATED SUCCESSFULLY ---------");
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                     break;
+
                                 case 4:
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                     System.out.println("ENTER NEW TAGS (COMMA SEPARATED) -------");
@@ -233,8 +237,8 @@ public class Main {
                                     String newTagInput = scanner.nextLine();
                                     ArrayList<String> newTags = new ArrayList<>();
 
-                                    if (!newTagInput.trim().isEmpty()) {
-                                        for (String t : newTagInput.split(",")) {
+                                    if(!newTagInput.trim().isEmpty()) {
+                                        for(String t : newTagInput.split(",")) {
                                             newTags.add(t.trim());
                                         }
                                     }
@@ -243,6 +247,7 @@ public class Main {
                                     System.out.println("TASK TAGS UPDATED ----------------------");
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                     break;
+
                                 case 5:
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                     System.out.println("ENTER NEW NOTES ------------------------");
@@ -255,7 +260,7 @@ public class Main {
                                     break;
                             }
 
-                            if (currentUser.editTask(editTaskID, taskToEdit)) {
+                            if(currentUser.editTask(editTaskID, taskToEdit)) {
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                 System.out.println("TASK UPDATED SUCCESSFULLY --------------");
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
@@ -265,6 +270,7 @@ public class Main {
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             }
                             break;
+
                         case 4:
                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             System.out.println("SORT TASKS BY: -------------------------");
@@ -277,17 +283,19 @@ public class Main {
                             int sortChoiceT = scanner.nextInt();
                             scanner.nextLine();
 
-                            switch (sortChoiceT) {
+                            switch(sortChoiceT) {
                                 case 1: currentUser.displayTaskDatabaseSummary(new TaskSortByID()); break;
                                 case 2: currentUser.displayTaskDatabaseSummary(new TaskSortByName()); break;
                                 case 3: currentUser.displayTaskDatabaseSummary(new TaskSortByDate()); break;
                                 default: currentUser.displayTaskDatabaseSummary(); break;
                             }
                             break;
+
                         case 5:
                             newEvent = EventFactory.getInstance(scanner).createItem();
                             currentUser.addEvent(newEvent);
                             break;
+
                         case 6:
                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             System.out.println("PLEASE ENTER THE ID OF THE EVENT -------");
@@ -295,7 +303,7 @@ public class Main {
                             eventID = scanner.nextInt();
                             scanner.nextLine();
 
-                            if (currentUser.removeEvent(eventID)) {
+                            if(currentUser.removeEvent(eventID)) {
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                 System.out.println("EVENT SUCCESSFULLY REMOVED -------------");
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
@@ -305,7 +313,14 @@ public class Main {
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             }
                             break;
+
                         case 7:
+                            // EDIT EVENT (same pattern as tasks)
+                            SimpleDateFormat sdfEvent = new SimpleDateFormat("yyyy-MM-dd");
+                            sdfEvent.setLenient(false);
+                            Date newEventDate = null;
+                            validDate = false;
+
                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             System.out.println("ENTER EVENT ID OF EVENT TO BE EDITED ---");
                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
@@ -313,7 +328,7 @@ public class Main {
                             scanner.nextLine();
 
                             Event eventToEdit = currentUser.getEvent(editEventID);
-                            if (eventToEdit == null) {
+                            if(eventToEdit == null) {
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                 System.out.println("EVENT NOT FOUND ------------------------");
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
@@ -333,107 +348,78 @@ public class Main {
                             int attributeChoice = scanner.nextInt();
                             scanner.nextLine();
 
-                            sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            sdf.setLenient(false);
-                            Date newDate = null;
-                            validDate = false;
-
-                            switch (attributeChoice) {
+                            switch(attributeChoice) {
                                 case 1:
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                     System.out.println("ENTER NEW EVENT NAME -------------------");
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    String newName = scanner.nextLine();
-                                    eventToEdit.setEventName(newName);
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    System.out.println("EVENT NAME UPDATED ---------------------");
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                    String newEventName = scanner.nextLine();
+                                    eventToEdit.setEventName(newEventName);
                                     break;
-
                                 case 2:
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                     System.out.println("ENTER NEW EVENT DESCRIPTION ------------");
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    String newDescription = scanner.nextLine();
-                                    eventToEdit.setEventDescription(newDescription);
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    System.out.println("EVENT DESCRIPTION UPDATED --------------");
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                    String newEventDescription = scanner.nextLine();
+                                    eventToEdit.setEventDescription(newEventDescription);
                                     break;
-
                                 case 3:
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                     System.out.println("ENTER NEW EVENT LOCATION ---------------");
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    String newLocation = scanner.nextLine();
-                                    eventToEdit.setEventLocation(newLocation);
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    System.out.println("EVENT LOCATION UPDATED ------------------");
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                    String newEventLocation = scanner.nextLine();
+                                    eventToEdit.setEventLocation(newEventLocation);
                                     break;
-
                                 case 4:
-                                    while (!validDate) {
+                                    while(!validDate) {
                                         System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                         System.out.println("ENTER NEW EVENT START DATE -------------");
                                         System.out.println("(FORMAT: YYYY-MM-DD) -------------------");
                                         System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                         String dateStr = scanner.nextLine();
                                         try {
-                                            newDate = sdf.parse(dateStr);
+                                            newEventDate = sdfEvent.parse(dateStr);
                                             validDate = true;
-                                        } catch (ParseException e) {
+                                        } catch(ParseException e) {
                                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                             System.out.println("INVALID FORMAT ----- ENTER AS YYYY-MM-DD");
                                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                         }
                                     }
-                                    eventToEdit.setEventStartDate(newDate);
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    System.out.println("EVENT START DATE UPDATED ---------------");
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                    eventToEdit.setEventStartDate(newEventDate);
                                     break;
-
                                 case 5:
                                     validDate = false;
-                                    while (!validDate) {
+                                    while(!validDate) {
                                         System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                         System.out.println("ENTER NEW EVENT END DATE ---------------");
                                         System.out.println("(FORMAT: YYYY-MM-DD) -------------------");
                                         System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                         String dateStr = scanner.nextLine();
                                         try {
-                                            newDate = sdf.parse(dateStr);
-                                            if (newDate.before(eventToEdit.getEventStartDate())) {
+                                            newEventDate = sdfEvent.parse(dateStr);
+                                            if(newEventDate.before(eventToEdit.getEventStartDate())) {
                                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                                 System.out.println("END DATE CANNOT BE BEFORE START DATE ---");
                                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                             } else {
                                                 validDate = true;
                                             }
-                                        } catch (ParseException e) {
+                                        } catch(ParseException e) {
                                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                             System.out.println("INVALID FORMAT ----- ENTER AS YYYY-MM-DD");
                                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                         }
                                     }
-                                    eventToEdit.setEventEndDate(newDate);
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    System.out.println("EVENT END DATE UPDATED -----------------");
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                    eventToEdit.setEventEndDate(newEventDate);
                                     break;
-
                                 case 6:
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                     System.out.println("ENTER NEW EVENT NOTES ------------------");
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    String newNotes = scanner.nextLine();
-                                    eventToEdit.setEventNotes(newNotes);
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                                    System.out.println("EVENT NOTES UPDATED --------------------");
-                                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                    String newEventNotes = scanner.nextLine();
+                                    eventToEdit.setEventNotes(newEventNotes);
                                     break;
-
                                 default:
                                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                     System.out.println("INVALID SELECTION ----------------------");
@@ -441,7 +427,7 @@ public class Main {
                                     break;
                             }
 
-                            if (currentUser.editEvent(editEventID, eventToEdit)) {
+                            if(currentUser.editEvent(editEventID, eventToEdit)) {
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                 System.out.println("EVENT UPDATED SUCCESSFULLY -------------");
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
@@ -451,6 +437,7 @@ public class Main {
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             }
                             break;
+
                         case 8:
                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             System.out.println("SORT EVENTS BY: ------------------------");
@@ -464,7 +451,7 @@ public class Main {
                             int sortChoiceE = scanner.nextInt();
                             scanner.nextLine();
 
-                            switch (sortChoiceE) {
+                            switch(sortChoiceE) {
                                 case 1: currentUser.displayEventDatabaseSummary(new EventSortByID()); break;
                                 case 2: currentUser.displayEventDatabaseSummary(new EventSortByName()); break;
                                 case 3: currentUser.displayEventDatabaseSummary(new EventSortByStartDate()); break;
@@ -474,42 +461,159 @@ public class Main {
                             break;
 
                         case 9:
-                            if (currentUser.undo()) {
+                            if(currentUser.undo()) {
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                 System.out.println("SUCCESSFULLY REVERT LAST CHANGE --------");
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                            }
-                            else {
+                            } else {
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
                                 System.out.println("UNABLE TO REVERT LAST CHANGE -----------");
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             }
                             break;
+
                         case 10:
                             System.out.println(currentUser.getUserInfo());
                             break;
+
                         case 11:
                             currentUser = null;
                             break;
+
                         case 12:
                             users.removeUser(currentUser);
                             currentUser = null;
                             break;
+
+                        case 13:
+                            boolean birthdayMenu = true;
+                            while(birthdayMenu) {
+                                System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                System.out.println("1. ADD BIRTHDAY ------------------------");
+                                System.out.println("2. REMOVE BIRTHDAY ---------------------");
+                                System.out.println("3. EDIT BIRTHDAY -----------------------");
+                                System.out.println("4. VIEW BIRTHDAYS ----------------------");
+                                System.out.println("5. RETURN -------------------------------");
+                                System.out.println("++++++++++++++++++++++++++++++++++++++++");
+
+                                int bAction = scanner.nextInt();
+                                scanner.nextLine();
+
+                                switch(bAction) {
+                                    case 1:
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        System.out.println("ENTER NAME -----------------------------");
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        String bName = scanner.nextLine();
+
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        System.out.println("ENTER BIRTHDAY (MM-DD) -----------------");
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        String dateStr = scanner.nextLine();
+                                        SimpleDateFormat sdfBirth = new SimpleDateFormat("MM-dd");
+                                        sdfBirth.setLenient(false);
+                                        try {
+                                            Date bDate = sdfBirth.parse(dateStr);
+                                            newBirthday = new Birthday(bName, bDate);
+                                            currentUser.addBirthday(newBirthday);
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                            System.out.println("BIRTHDAY ADDED SUCCESSFULLY ------------");
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        } catch(ParseException e) {
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                            System.out.println("INVALID DATE FORMAT --------------------");
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        }
+                                        break;
+
+                                    case 2:
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        System.out.println("ENTER BIRTHDAY ID TO REMOVE -------------");
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        birthdayID = scanner.nextInt();
+                                        scanner.nextLine();
+                                        if(currentUser.removeBirthday(birthdayID)) {
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                            System.out.println("BIRTHDAY REMOVED -----------------------");
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        } else {
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                            System.out.println("BIRTHDAY NOT FOUND ---------------------");
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        }
+                                        break;
+
+                                    case 3:
+                                        // EDIT BIRTHDAY (similar pattern to tasks/events)
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        System.out.println("ENTER BIRTHDAY ID TO EDIT ----------------");
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        birthdayID = scanner.nextInt();
+                                        scanner.nextLine();
+                                        Birthday bToEdit = currentUser.getBirthday(birthdayID);
+                                        if(bToEdit == null) {
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                            System.out.println("BIRTHDAY NOT FOUND ----------------------");
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                            break;
+                                        }
+
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        System.out.println("ENTER NEW NAME --------------------------");
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        bName = scanner.nextLine();
+                                        bToEdit.setName(bName);
+
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        System.out.println("ENTER NEW BIRTHDAY (MM-DD) --------------");
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        dateStr = scanner.nextLine();
+                                        SimpleDateFormat sdfEditBirth = new SimpleDateFormat("MM-dd");
+                                        sdfEditBirth.setLenient(false);
+                                        try {
+                                            Date bDate = sdfEditBirth.parse(dateStr);
+                                            bToEdit.setDate(bDate);
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                            System.out.println("BIRTHDAY UPDATED ------------------------");
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        } catch(ParseException e) {
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                            System.out.println("INVALID DATE FORMAT --------------------");
+                                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        }
+                                        break;
+
+                                    case 4:
+                                        currentUser.displayBirthdays();
+                                        break;
+
+                                    case 5:
+                                        birthdayMenu = false;
+                                        break;
+
+                                    default:
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        System.out.println("INVALID SELECTION ----------------------");
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                        break;
+                                }
+                            }
+                            break;
+
+                        default:
+                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                            System.out.println("INVALID SELECTION ----------------------");
+                            System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                            break;
                     }
-                }
-                catch (Exception e) {
+                } catch(Exception e) {
                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                    System.out.println("INVALID INPUT --------- PLEASE TRY AGAIN");
+                    System.out.println("INVALID INPUT --------------------------");
                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
-                    scanner.nextLine(); 
-                    continue;
+                    scanner.nextLine();
                 }
             }
         }
-
         scanner.close();
-        System.out.println("++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("---- EXITED APP ------------------------");
-        System.out.println("++++++++++++++++++++++++++++++++++++++++");
     }
 }
