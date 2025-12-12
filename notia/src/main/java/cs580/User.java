@@ -5,6 +5,8 @@ public class User {
     private final TaskDatabase taskDatabase;
     private final EventDatabase eventDatabase;
     private final BirthdayDatabase birthdayDatabase;
+    private final NoteDatabase noteDatabase;
+
     private UserMemento lastMemento;
 
     public User(UserData userInfo) {
@@ -12,6 +14,8 @@ public class User {
         this.taskDatabase = new TaskDatabase();
         this.eventDatabase = new EventDatabase();
         this.birthdayDatabase = new BirthdayDatabase();
+        this.noteDatabase = new NoteDatabase();
+
     }
 
     public void addTask(Task task) {
@@ -118,4 +122,18 @@ public class User {
             System.out.println("----------------------------------------");
         }
     }
+
+    public void addNote(Note n) { noteDatabase.addNote(n); }
+    public boolean removeNote(int id) { return noteDatabase.removeNote(id); }
+    public Note getNote(int id) { return noteDatabase.getNote(id); }
+    public boolean editNote(int id, Note newN) { return noteDatabase.updateNote(id, newN); }
+
+    public void displayNotes() {
+        System.out.println("----------------------------------------");
+        for (Note n : noteDatabase) {
+            System.out.println(n.getNoteSummary());
+            System.out.println("----------------------------------------");
+        }
+    }
+
 }

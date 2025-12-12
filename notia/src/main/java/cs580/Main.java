@@ -5,8 +5,22 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
 
+    public static int readInt(Scanner scanner) {
+        while (true) {
+            try {
+                int input = scanner.nextInt();
+                scanner.nextLine(); // consume leftover newline
+                return input;
+            } catch (InputMismatchException e) {
+                System.out.println("INVALID INPUT ----- PLEASE ENTER A NUMBER");
+                scanner.nextLine();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        
         Scanner scanner = new Scanner(System.in);
         UserDatabase users = UserDatabase.getInstance();
         User currentUser = null;
@@ -27,8 +41,7 @@ public class Main {
                 System.out.println("3. EXIT APP ----------------------------");
                 System.out.println("################################################################################");
                 try {
-                    action = scanner.nextInt();
-                    scanner.nextLine();
+                    action = readInt(scanner);
 
                     switch(action) {
                         case 1:
@@ -124,10 +137,10 @@ public class Main {
                 System.out.println("11. SIGN OUT OF USER -------------------");
                 System.out.println("12. DELETE USER ACC --------------------");
                 System.out.println("13. BIRTHDAY MENU ----------------------");
+                System.out.println("14. NOTE MENU --------------------------");
                 System.out.println("################################################################################");
 
-                action = scanner.nextInt();
-                scanner.nextLine();
+                action = readInt(scanner);
 
                 try {
                     switch(action) {
@@ -178,8 +191,7 @@ public class Main {
                             System.out.println("5.  TASK NOTES -------------------------");
                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
 
-                            action = scanner.nextInt();
-                            scanner.nextLine();
+                            action = readInt(scanner);
 
                             switch(action) {
                                 case 1:
@@ -496,8 +508,7 @@ public class Main {
                                 System.out.println("5. RETURN -------------------------------");
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++");
 
-                                int bAction = scanner.nextInt();
-                                scanner.nextLine();
+                                int bAction = readInt(scanner);
 
                                 switch(bAction) {
                                     case 1:
@@ -599,7 +610,65 @@ public class Main {
                                 }
                             }
                             break;
+                        case 14:
+                            boolean noteMenu = true;
+                            while (noteMenu) {
+                                System.out.println("++++++++++++++++++++++++++++++++++++++++");
+                                System.out.println("1. ADD NOTE ----------------------------");
+                                System.out.println("2. REMOVE NOTE -------------------------");
+                                System.out.println("3. EDIT NOTE ---------------------------");
+                                System.out.println("4. VIEW NOTES --------------------------");
+                                System.out.println("5. RETURN ------------------------------");
+                                System.out.println("++++++++++++++++++++++++++++++++++++++++");
 
+                                int nAction = readInt(scanner);
+
+                                switch (nAction) {
+                                    case 1:
+                                        System.out.println("ENTER NOTE TEXT:");
+                                        String text = scanner.nextLine();
+                                        currentUser.addNote(new Note(text));
+                                        System.out.println("NOTE ADDED.");
+                                        break;
+
+                                    case 2:
+                                        System.out.println("ENTER NOTE ID TO REMOVE:");
+                                        int nid = scanner.nextInt();
+                                        scanner.nextLine();
+                                        if (currentUser.removeNote(nid))
+                                            System.out.println("NOTE REMOVED.");
+                                        else
+                                            System.out.println("NOTE NOT FOUND.");
+                                        break;
+
+                                    case 3:
+                                        System.out.println("ENTER NOTE ID TO EDIT:");
+                                        nid = scanner.nextInt();
+                                        scanner.nextLine();
+                                        Note toEdit = currentUser.getNote(nid);
+                                        if (toEdit == null) {
+                                            System.out.println("NOTE NOT FOUND.");
+                                            break;
+                                        }
+                                        System.out.println("ENTER NEW TEXT:");
+                                        String newText = scanner.nextLine();
+                                        toEdit.setText(newText);
+                                        System.out.println("NOTE UPDATED.");
+                                        break;
+
+                                    case 4:
+                                        currentUser.displayNotes();
+                                        break;
+
+                                    case 5:
+                                        noteMenu = false;
+                                        break;
+
+                                    default:
+                                        System.out.println("INVALID SELECTION.");
+                                }
+                            }
+                            break;
                         default:
                             System.out.println("++++++++++++++++++++++++++++++++++++++++");
                             System.out.println("INVALID SELECTION ----------------------");
